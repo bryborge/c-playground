@@ -1,0 +1,24 @@
+{
+  "name": "C Development Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {},
+  "postCreateCommand": "sudo apt update && sudo apt install -y build-essential gdb cmake valgrind clang clangd",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.makefile-tools",
+        "nhoizey.gremlins",
+        "IBM.output-colorizer",
+        "shardulm94.trailing-spaces"
+      ],
+      "settings": {
+        "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+        "C_Cpp.intelliSenseEngine": "default"
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}
