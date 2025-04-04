@@ -14,7 +14,7 @@ SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 # Output binary
-TARGET = $(BUILD_DIR)/hello
+TARGET = $(BUILD_DIR)/main
 
 # Default rule
 all: $(TARGET)
