@@ -2,3 +2,5 @@ _assignments/*
 _discussions/*
 _labs/*
 build/*
+.DS_Store
+
