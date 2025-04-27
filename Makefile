@@ -17,7 +17,7 @@ CFLAGS := -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -ped
 LDFLAGS := -lm
 
 # Build executable
-$(NAME): format lint dir $(OBJS)
+$(NAME): dir $(OBJS) # format lint
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BIN_DIR)/$@ $(patsubst %, build/%, $(OBJS))
 
 # Build object files and third-party libraries
