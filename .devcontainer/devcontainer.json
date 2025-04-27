@@ -2,21 +2,24 @@
   "name": "C Development Environment",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {},
-  "postCreateCommand": "sudo apt update && sudo apt install -y build-essential gdb cmake valgrind clang clangd",
+  "postCreateCommand": "sudo apt update && sudo apt install -y build-essential gdb cmake valgrind clang clang-format clang-tidy clangd",
   "customizations": {
     "vscode": {
       "extensions": [
         "EditorConfig.EditorConfig",
+        "GitHub.copilot-chat",
+        "IBM.output-colorizer",
         "ms-vscode.cpptools",
         "ms-vscode.cpptools-extension-pack",
         "ms-vscode.makefile-tools",
         "nhoizey.gremlins",
-        "IBM.output-colorizer",
-        "shardulm94.trailing-spaces"
+        "shardulm94.trailing-spaces",
+        "twxs.cmake"
       ],
       "settings": {
-        "C_Cpp.default.compilerPath": "/usr/bin/gcc",
-        "C_Cpp.intelliSenseEngine": "default"
+        "C_Cpp.default.compilerPath": "/usr/bin/clang",
+        "C_Cpp.intelliSenseEngine": "default",
+        "C_Cpp.default.compilerArgs": ["-std=gnu17"]
       }
     }
   },

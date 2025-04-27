@@ -2,46 +2,98 @@ NAME := main
 BIN_DIR := bin
 BUILD_DIR := build
 INCLUDE_DIR := include
-OBJ_DIR = $(BUILD_DIR)/obj
+OBJ_DIR := $(BUILD_DIR)/obj
 SRC_DIR := src
 TESTS_DIR := tests
 
-OBJS := $(patsubst %.c,%.o, $(wildcard $(SRC_DIR)/*.c) $(wildcard $(LIB_DIR)/**/*.c))
+# Source files and dependencies
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+OBJS := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
+# Compiler and flags
 CC := clang
-# TODO: Add linting and formatting
-# LINTER := clang-tidy
-# FORMATTER := clang-format
+LINTER := clang-tidy
+FORMATTER := clang-format
 
-CFLAGS := -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic
+# Colors for output
+CYAN := \033[36m
+GREEN := \033[32m
+RESET := \033[0m
+
+# Compiler flags
+CFLAGS := -std=gnu17 \
+	-D _GNU_SOURCE \
+	-D __STDC_WANT_LIB_EXT1__ \
+	-Wall \
+	-Wextra \
+	-pedantic \
+	-I$(INCLUDE_DIR) \
+	-MMD \
+	-MP
+
+# Different build configurations
+ifeq ($(BUILD),release)
+	CFLAGS += -O2 -DNDEBUG
+else
+	CFLAGS += -g -O0 -DDEBUG
+endif
+
 LDFLAGS := -lm
 
+# Main targets
+.PHONY: all clean test format lint check debug release
+
+all: $(BIN_DIR)/$(NAME)
+
+debug: CFLAGS += -g -O0 -DDEBUG
+debug: all
+
+release: CFLAGS += -O2 -DNDEBUG
+release: all
+
 # Build executable
-$(NAME): format lint dir $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BIN_DIR)/$@ $(patsubst %, build/%, $(OBJS))
+$(BIN_DIR)/$(NAME): $(OBJS)
+	@printf "$(CYAN)Linking executable $(NAME)...$(RESET)\n"
+	@mkdir -p $(BIN_DIR)
+	@$(CC) $(OBJS) -o $@ $(LDFLAGS)
+	@printf "$(GREEN)Build complete!$(RESET)\n"
 
-# Build object files and third-party libraries
-$(OBJS): dir
-	@mkdir -p $(BUILD_DIR)/$(@D)
-	@$(CC) $(CFLAGS) -o $(BUILD_DIR)/$@ -c $*.c
+# Build object files with dependency tracking
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@printf "$(CYAN)Compiling $<...$(RESET)\n"
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-test: dir
-	@$(CC) $(CFLAGS) -lcunit -o $(BIN_DIR)/$(NAME)_test $(TESTS_DIR)/*.c
-	@$(BIN_DIR)/$(NAME)_test
+# Tests
+test: $(BIN_DIR)/$(NAME)_test
+	@printf "$(CYAN)Running tests...$(RESET)\n"
+	@./$(BIN_DIR)/$(NAME)_test
+	@printf "$(GREEN)Tests complete!$(RESET)\n"
 
-# TODO: Add formatting
-# format:
-# 	@$(FORMATTER) -style=file -i $(SRC_DIR)/* $(INCLUDE_DIR)/* $(TESTS_DIR)/*
+$(BIN_DIR)/$(NAME)_test: $(TESTS_DIR)/*.c
+	@mkdir -p $(BIN_DIR)
+	@$(CC) $(CFLAGS) -o $@ $^ -lcunit
 
-check: $(NAME)
-	@sudo valgrind -s --leak-check=full --show-leak-kinds=all $(BIN_DIR)/$< --help
-	@sudo valgrind -s --leak-check=full --show-leak-kinds=all $(BIN_DIR)/$< --version
-	@sudo valgrind -s --leak-check=full --show-leak-kinds=all $(BIN_DIR)/$< -v
+# Code quality
+format:
+	@printf "$(CYAN)Formatting code...$(RESET)\n"
+	@$(FORMATTER) -style=file -i $(SRC_DIR)/* $(INCLUDE_DIR)/* $(TESTS_DIR)/*
 
-dir:
-	@mkdir -p $(BUILD_DIR) $(BIN_DIR)
+lint:
+	@printf "$(CYAN)Linting code...$(RESET)\n"
+	@$(LINTER) $(SRC_DIR)/* $(INCLUDE_DIR)/* $(TESTS_DIR)/*
 
+check: $(BIN_DIR)/$(NAME)
+	@printf "$(CYAN)Running memory checks...$(RESET)\n"
+	@valgrind -s --leak-check=full --show-leak-kinds=all ./$< --help
+	@valgrind -s --leak-check=full --show-leak-kinds=all ./$< --version
+	@valgrind -s --leak-check=full --show-leak-kinds=all ./$< -v
+
+# Cleanup
 clean:
+	@printf "$(CYAN)Cleaning build files...$(RESET)\n"
 	@rm -rf $(BUILD_DIR) $(BIN_DIR)
 
-.PHONY: lint format check setup dir clean
+# Include dependency files
+-include $(DEPS)
