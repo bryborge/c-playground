@@ -1,6 +1,7 @@
 _assignments/*
 _discussions/*
 _labs/*
+bin/*
 build/*
+!.gitkeep
 .DS_Store
-

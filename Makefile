@@ -1,38 +1,47 @@
-# Compiler and flags
-CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
-LDFLAGS = -lm
-
-# Directories
-SRC_DIR = src
-INCLUDE_DIR = include
-BUILD_DIR = build
+NAME := main
+BIN_DIR := bin
+BUILD_DIR := build
+INCLUDE_DIR := include
 OBJ_DIR = $(BUILD_DIR)/obj
+SRC_DIR := src
+TESTS_DIR := tests
 
-# Source files and corresponding object files
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+OBJS := $(patsubst %.c,%.o, $(wildcard $(SRC_DIR)/*.c) $(wildcard $(LIB_DIR)/**/*.c))
 
-# Output binary
-TARGET = $(BUILD_DIR)/main
+CC := clang
+# TODO: Add linting and formatting
+# LINTER := clang-tidy
+# FORMATTER := clang-format
 
-# Default rule
-all: $(TARGET)
+CFLAGS := -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic
+LDFLAGS := -lm
 
-# Link objects into the final binary
-$(TARGET): $(OBJ) | $(BUILD_DIR)
-	$(CC) $(OBJ) -o $(TARGET) $(LDFLAGS)
+# Build executable
+$(NAME): format lint dir $(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BIN_DIR)/$@ $(patsubst %, build/%, $(OBJS))
 
-# Compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+# Build object files and third-party libraries
+$(OBJS): dir
+	@mkdir -p $(BUILD_DIR)/$(@D)
+	@$(CC) $(CFLAGS) -o $(BUILD_DIR)/$@ -c $*.c
 
-# Ensure build directories exist
-$(BUILD_DIR) $(OBJ_DIR):
-	mkdir -p $@
+test: dir
+	@$(CC) $(CFLAGS) -lcunit -o $(BIN_DIR)/$(NAME)_test $(TESTS_DIR)/*.c
+	@$(BIN_DIR)/$(NAME)_test
 
-# Clean rule
+# TODO: Add formatting
+# format:
+# 	@$(FORMATTER) -style=file -i $(SRC_DIR)/* $(INCLUDE_DIR)/* $(TESTS_DIR)/*
+
+check: $(NAME)
+	@sudo valgrind -s --leak-check=full --show-leak-kinds=all $(BIN_DIR)/$< --help
+	@sudo valgrind -s --leak-check=full --show-leak-kinds=all $(BIN_DIR)/$< --version
+	@sudo valgrind -s --leak-check=full --show-leak-kinds=all $(BIN_DIR)/$< -v
+
+dir:
+	@mkdir -p $(BUILD_DIR) $(BIN_DIR)
+
 clean:
-	rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR) $(BIN_DIR)
 
-.PHONY: all clean
+.PHONY: lint format check setup dir clean

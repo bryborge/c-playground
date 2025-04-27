@@ -32,9 +32,7 @@ make
 You should see output like this:
 
 ```sh
-mkdir -p build/obj
-gcc -Wall -Wextra -Iinclude -c src/main.c -o build/obj/main.o
-gcc  build/obj/main.o -o build/main
+clang -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic -lm -o bin/main  build/src/main.o
 ```
 
 This means that the build succeeded and the compiled binary can be found in the `./build/main` directory of this
@@ -43,7 +41,7 @@ project.
 To run the binary from the command line, run:
 
 ```sh
-./build/main
+./bin/main
 ```
 
 Happy Hacking! 🧑‍💻 🇨
