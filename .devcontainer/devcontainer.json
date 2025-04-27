@@ -2,7 +2,7 @@
   "name": "C Development Environment",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {},
-  "postCreateCommand": "sudo apt update && sudo apt install -y build-essential gdb cmake valgrind clang clang-format clang-tidy clangd",
+  "postCreateCommand": "sudo apt update && sudo apt install -y build-essential gdb cmake valgrind clang clang-format clang-tidy clangd libcunit1 libcunit1-doc libcunit1-dev",
   "customizations": {
     "vscode": {
       "extensions": [

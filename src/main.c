@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "main.h"
 
 /*******************************************************************************
 # Author(s):        <AUTHOR_NAME>
@@ -9,7 +10,7 @@
 # Output:           <OUTPUTS/RETURN VALUES>
 # Source(s):        <SOURCES>
 #******************************************************************************/
+
 int main(void) {
-  printf("Hello, World!\n");
-  return 0;
+    return get_hello_result();
 }

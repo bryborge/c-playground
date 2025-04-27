@@ -66,14 +66,27 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 # Tests
+TEST_SRCS := $(wildcard $(TESTS_DIR)/*.c)
+TEST_OBJS := $(TEST_SRCS:$(TESTS_DIR)/%.c=$(OBJ_DIR)/%.o)
+PROG_OBJS := $(filter-out $(OBJ_DIR)/main.o, $(OBJS))
+ALL_TEST_OBJS := $(PROG_OBJS) $(TEST_OBJS)
+
+# Add rule to compile test source files
+$(OBJ_DIR)/%.o: $(TESTS_DIR)/%.c
+	@printf "$(CYAN)Compiling test $<...$(RESET)\n"
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+
 test: $(BIN_DIR)/$(NAME)_test
 	@printf "$(CYAN)Running tests...$(RESET)\n"
 	@./$(BIN_DIR)/$(NAME)_test
 	@printf "$(GREEN)Tests complete!$(RESET)\n"
 
-$(BIN_DIR)/$(NAME)_test: $(TESTS_DIR)/*.c
+$(BIN_DIR)/$(NAME)_test: $(ALL_TEST_OBJS)
+	@printf "$(CYAN)Linking test executable...$(RESET)\n"
 	@mkdir -p $(BIN_DIR)
-	@$(CC) $(CFLAGS) -o $@ $^ -lcunit
+	@$(CC) $(ALL_TEST_OBJS) -o $@ -lcunit $(LDFLAGS)
+	@printf "$(GREEN)Test build complete!$(RESET)\n"
 
 # Code quality
 format:

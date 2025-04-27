@@ -48,7 +48,12 @@ Happy Hacking! 🧑‍💻 🇨
 
 ## ✅ Testing
 
-TBD...
+This project uses [CUnit](https://cunit.sourceforge.net/) to run unit tests, and it is configured to work in the
+devcontainer using the following make command:
+
+```sh
+make test
+```
 
 ## 📚 Resources
 
