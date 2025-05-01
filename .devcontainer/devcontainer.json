@@ -1,8 +1,9 @@
 {
   "name": "C Development Environment",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
   "features": {},
-  "postCreateCommand": "sudo apt update && sudo apt install -y build-essential gdb cmake valgrind clang clang-format clang-tidy clangd libcunit1 libcunit1-doc libcunit1-dev",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -13,8 +14,7 @@
         "ms-vscode.cpptools-extension-pack",
         "ms-vscode.makefile-tools",
         "nhoizey.gremlins",
-        "shardulm94.trailing-spaces",
-        "twxs.cmake"
+        "shardulm94.trailing-spaces"
       ],
       "settings": {
         "C_Cpp.default.compilerPath": "/usr/bin/clang",

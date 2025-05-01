@@ -1,6 +1,19 @@
-_assignments/*
-_discussions/*
-_labs/*
-bin/*
-build/*
+# Compiled Files
+bin/
+build/
+*.o
+*.out
+*.exe
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.cmake
+Makefile
+
+# Other
+_assignments/
+_discussions/
+_labs/
 .DS_Store

@@ -3,6 +3,8 @@
     "stdio.h": "c",
     "math.h": "c",
     "cunit.h": "c",
-    "basic.h": "c"
+    "basic.h": "c",
+    "hello.h": "c",
+    "main.h": "c"
   }
 }
