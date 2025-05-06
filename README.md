@@ -19,40 +19,36 @@ That's it!
 
 ## ♼ Compiling
 
-You can compile your C code by running the command `make` (or `make all`) in the integrated terminal emulator at the
-root of the project.
+[CMake](https://cmake.org/) is the build system used in this project.
 
-Example:
+1.  Run CMake at the root of the project.
 
-```sh
-cd c-playground
-make
-```
+    ```sh
+    cmake .
+    ```
 
-You should see output like this:
+2.  This should have created a `Makefile`. Run the `make` command to compile the project binaries.
 
-```sh
-clang -std=gnu17 -D _GNU_SOURCE -D __STDC_WANT_LIB_EXT1__ -Wall -Wextra -pedantic -lm -o bin/main  build/src/main.o
-```
+    ```sh
+    make
+    ```
 
-This means that the build succeeded and the compiled binary can be found in the `./build/main` directory of this
-project.
+3.  You should now have a compiled binary that can be run.
 
-To run the binary from the command line, run:
-
-```sh
-./bin/main
-```
+    ```sh
+    ./bin/hello
+    > Hello, World!
+    ```
 
 Happy Hacking! 🧑‍💻 🇨
 
 ## ✅ Testing
 
 This project uses [CUnit](https://cunit.sourceforge.net/) to run unit tests, and it is configured to work in the
-devcontainer using the following make command:
+devcontainer after successfully compiling.
 
 ```sh
-make test
+./bin/tests
 ```
 
 ## 📚 Resources
@@ -60,3 +56,6 @@ make test
 -   [VS Code Documentation - Setting up Devcontainers](https://code.visualstudio.com/docs/devcontainers/containers)
 -   ["Official" C Documentation (ISO Standard)](https://www.iso.org/standard/82075.html)
 -   [Microsoft's C Documentation](https://learn.microsoft.com/en-us/cpp/c-language/?view=msvc-170)
+-   [CMake Documentation](https://cmake.org/documentation/)
+-   [GNU Make Documentation](https://www.gnu.org/software/make/)
+-   [CUnit Documentation](https://cunit.sourceforge.net/doc/index.html)

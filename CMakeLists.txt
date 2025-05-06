@@ -10,8 +10,8 @@ target_sources(hello PRIVATE ${SOURCE_DIR}/main.c ${SOURCE_DIR}/hello.c)
 
 # unit tests
 set(TEST_SOURCE_DIR tests)
-add_executable(hello_tests ${TEST_SOURCE_DIR}/main_test.c ${SOURCE_DIR}/hello.c)
-target_link_libraries(hello_tests cunit)
+add_executable(tests ${TEST_SOURCE_DIR}/main_test.c ${SOURCE_DIR}/hello.c)
+target_link_libraries(tests cunit)
 
 # target: cleanup
 add_custom_target(cleanup
