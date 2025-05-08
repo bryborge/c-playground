@@ -2,6 +2,8 @@
 #include "../include/hello.h"
 
 int get_hello_result(void) {
-    printf("Hello, World!\n");
+    char greeting[] = "Hello, World!";
+
+    printf("%s\n", greeting);
     return 0;
 }
