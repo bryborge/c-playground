@@ -5,6 +5,9 @@
     "cunit.h": "c",
     "basic.h": "c",
     "hello.h": "c",
-    "main.h": "c"
-  }
+    "main.h": "c",
+    "ctype.h": "c",
+    "string.h": "c"
+  },
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

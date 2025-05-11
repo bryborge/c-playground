@@ -7,7 +7,6 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "continue.continue",
         "EditorConfig.EditorConfig",
         "GitHub.copilot-chat",
         "IBM.output-colorizer",
