@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Conan package manager
-RUN pip3 install --no-cache-dir conan
+# TODO: Fix conan
+# RUN pip3 install --no-cache-dir conan
 
 # Set default compiler to clang
 ENV CC=/usr/bin/clang
